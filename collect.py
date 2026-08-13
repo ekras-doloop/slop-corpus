@@ -2,8 +2,11 @@
 """doloop slop-corpus collector: ask the fixed situational prompts (prompts.json) to the LATEST models
 via OpenRouter, save a dated snapshot to data/. Latest chat flagship per lab is auto-detected each run,
 so the corpus tracks new releases automatically. OPENROUTER_API_KEY from env. Usage: collect.py <YYYY-MM-DD>"""
-import urllib.request, json, os, sys, time
+import urllib.request, json, os, sys, time, signal
 OR="https://openrouter.ai/api/v1"; HERE=os.path.dirname(os.path.abspath(__file__))
+class _Deadline(Exception): pass
+def _alarm(sig,frm): raise _Deadline()
+signal.signal(signal.SIGALRM,_alarm)   # hard TOTAL cap per call: urllib timeout is per-read, a trickle can hang past it
 LABS=("anthropic","openai","google","meta-llama","mistralai","x-ai","deepseek","qwen")
 SKIP=("guard","vision","embed","tts","whisper","image","audio","ocr","moderation","-free")
 def key():
@@ -20,16 +23,19 @@ def latest():
 def gen(k,model,text):
     body=json.dumps({"model":model,"messages":[{"role":"user","content":text}],"temperature":0.7,"max_tokens":1200,"reasoning":{"effort":"low"}}).encode()
     req=urllib.request.Request(OR+"/chat/completions",body,{"Authorization":f"Bearer {k}","Content-Type":"application/json","HTTP-Referer":"https://doloop.io","X-Title":"doloop-slop-corpus"})
-    for a in range(2):                                   # 2 tries, 60s each - a dead model costs ~2min not ~5
+    for a in range(2):                                   # 2 tries; a dead/slow model costs ~2.5min not hours
         try:
+            signal.alarm(75)                             # hard total deadline (beats urllib's per-read timeout)
             r=json.load(urllib.request.urlopen(req,timeout=60)); c=(r.get("choices") or [{}])[0].get("message",{}).get("content")
+            signal.alarm(0)
             if c: return c
         except urllib.error.HTTPError as e:
-            sys.stderr.write(f"[err {model} a{a}] HTTP {e.code}\n")
+            signal.alarm(0); sys.stderr.write(f"[err {model} a{a}] HTTP {e.code}\n")
             if e.code in (400,404):break              # bad/unknown model id - not transient, don't retry
             time.sleep(4)
-        except Exception as e: sys.stderr.write(f"[err {model} a{a}] {e}\n"); time.sleep(4)
-    return None
+        except _Deadline: sys.stderr.write(f"[err {model} a{a}] deadline 75s\n"); time.sleep(2)
+        except Exception as e: signal.alarm(0); sys.stderr.write(f"[err {model} a{a}] {e}\n"); time.sleep(4)
+    signal.alarm(0); return None
 def main(argv):
     date=argv[0] if argv else "undated"; k=key()
     os.makedirs(os.path.join(HERE,"data"),exist_ok=True)
