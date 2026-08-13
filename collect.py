@@ -44,9 +44,11 @@ def main(argv):
     out=os.path.join(HERE,"data",f"or_{date}.jsonl"); n=0
     with open(out,"w") as f:
         for model in models:
-            for p in prompts:
+            for i,p in enumerate(prompts):
                 t=gen(k,model,p["text"])
                 if t: f.write(json.dumps({"date":date,"model":model,"prompt_id":p["id"],"situation":p["situation"],"text":t})+"\n"); n+=1
+                elif i==0:                             # first prompt hard-failed -> model is down; skip its rest
+                    sys.stderr.write(f"[skip {model}] first call failed, skipping remaining {len(prompts)-1}\n"); break
     print(f"{n} generations from {len(models)} latest models x {len(prompts)} situations -> {out}")
     return 0
 if __name__=="__main__": sys.exit(main(sys.argv[1:]))
