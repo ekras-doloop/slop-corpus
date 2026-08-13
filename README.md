@@ -21,8 +21,11 @@ the drift for themselves rather than trust anyone's snapshot - ours included.
 
 ## Data
 - `data/or_<YYYY-MM-DD>.jsonl` - ongoing snapshots. One JSON object per line:
-  `{"date","era","model","prompt_id","situation","voice","text"}` (`era` = `latest`; `voice` is the
-  requested persona for the 4 steered prompts, else `null`).
+  `{"date","era","model","or_model","prompt_id","situation","voice","finish_reason","prompt_tokens","completion_tokens","params","text"}`.
+  `era`=`latest`; `voice`=requested persona for the 4 steered prompts, else `null`; `or_model`=the model
+  OpenRouter actually served; `finish_reason` lets you drop truncated rows; `params`=exact decode settings.
+- `data/*.manifest.json` - per snapshot: params, `prompt_set_sha256_16` (which prompt version made it),
+  models requested vs served, counts. Everything needed to reproduce or filter a snapshot.
 - `data/backfill_<YYYY-MM-DD>.jsonl` - **historical baseline** (`era` = `backfill`): the same prompts asked
   to notable *older, off-label* models (GPT-3.5, Claude 2, Llama-2, Mixtral, and the like). Drift needs an
   origin - you cannot measure a trend from today forward only. This anchors the timeline before the corpus began.
