@@ -38,6 +38,10 @@ the drift for themselves rather than trust anyone's snapshot - ours included.
 - New snapshot roughly every two weeks (see `.github/workflows/collect.yml`).
 
 ## Contribute
+**Lend a human voice in two minutes:** [open a "✍️ Add a human response" issue](../../issues/new?template=human-response.yml),
+pick a situation, type your answer - no git, no JSON. It becomes part of the human baseline the whole corpus
+is measured against.
+
 The corpus is open to extension - see [`CONTRIBUTING.md`](CONTRIBUTING.md). Add **human answers** (`human/`),
 **model runs we don't collect** (`data/community/` - local models, fine-tunes, older releases), or **suggest a
 model** for canonical runs via an issue. `python3 validate.py <file>` checks your rows; CI runs the same on

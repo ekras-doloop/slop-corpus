@@ -14,7 +14,13 @@ CI runs the same check on every PR. Green = mergeable.
 
 ---
 
-## 1. Add human answers  →  `human/`
+## 1. Add human answers
+
+**Easiest (no git):** open a [**"✍️ Add a human response"** issue](../../issues/new?template=human-response.yml),
+pick a situation, type your answer, submit. A maintainer folds accepted responses into `human/`. That's the
+open invitation - anyone can lend a human voice in two minutes.
+
+**Or by PR, straight to `human/`:**
 The reference every AI rate is measured against. Write your own answer to any of the 26 situations, from
 scratch (never paste model output). One JSON object per line:
 

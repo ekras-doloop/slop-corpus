@@ -1,0 +1,69 @@
+name: ✍️ Add a human response
+description: Answer one of the corpus prompts in your own words. No git, no JSON needed.
+title: '[human] '
+labels:
+- human-response
+body:
+- type: markdown
+  attributes:
+    value: Thanks for lending a human voice. Pick a situation, write how **you** actually would - loose, honest, in your own register. A real person, not polished prose. One prompt per issue. A maintainer folds accepted responses into `human/` under CC-BY-4.0.
+- type: dropdown
+  id: prompt
+  attributes:
+    label: Which situation?
+    description: The task is written in the option itself.
+    options:
+    - '[advice-newjob] advice: advice to someone anxious about their first week at a new job'
+    - '[condolence] condolence: a condolence note to a colleague whose parent has died'
+    - '[apology-deadline] apology: an apology to a client for missing a deadline'
+    - '[complaint-service] complaint: a complaint to a restaurant about a bad meal and slow service'
+    - '[review-headphones] review: a product review of mid-range wireless headphones'
+    - '[coverletter] cover-letter: a cover letter for a marketing coordinator role'
+    - '[toast-wedding] toast: a best-man or maid-of-honor wedding toast'
+    - '[selfreview] performance: a performance self-review for the past year at a software company'
+    - '[essay-solitude] reflective: a short reflective essay on the difference between solitude and loneli'
+    - '[news-bikelane] news: a local news brief: the city council approves a downtown bike-lane exp'
+    - '[explain-coffee] explainer: Explain, for a curious adult, why coffee tastes bitter'
+    - '[opinion-remote] opinion: an opinion column arguing that remote work has quietly changed cities'
+    - '[linkedin-milestone] social: a LinkedIn post announcing a work anniversary and a promotion'
+    - '[thankyou-mentor] thank-you: a thank-you note to a mentor who is retiring'
+    - '[recommendation] recommendation: a letter of recommendation for a former direct report applying to grad'
+    - '[faq-return] faq: the FAQ answer for ''How do I return an item?'' for an online store'
+    - '[bio-dating] profile: a dating-app profile bio for a 32-year-old who likes hiking and cookin'
+    - '[ooo-message] auto-reply: an out-of-office auto-reply for a two-week vacation'
+    - '[pep-talk] motivation: a short motivational message to a team before a big product launch'
+    - '[howto-tie] how-to: step-by-step instructions for tying a necktie'
+    - '[fiction-scene] fiction: the opening scene of a short story: a stranger steps off the last bus '
+    - '[marketing-landing] marketing: landing-page copy for a new focus-timer app called Cadence: a headline'
+    - '[humor-roast] humor: a lighthearted roast of a friend who is chronically twenty minutes lat'
+    - '[technical-https] technical: how HTTPS keeps a web request private, for a junior developer who know'
+    - '[cold-email] outreach: a cold outreach email pitching a partnership to the head of operations'
+    - '[tweet-thread] microblog: a five-post X thread sharing one hard lesson from a product launch tha'
+    - '[advice-linecook] advice: advice to someone anxious about their first week at a new job, in the '
+    - '[condolence-carver] condolence: a condolence note to a colleague whose parent has died, in the spare, '
+    - '[review-teenager] review: a product review of mid-range wireless headphones as a sarcastic, deep'
+    - '[opinion-pamphleteer] opinion: an opinion column arguing that remote work has quietly changed cities,'
+  validations:
+    required: true
+- type: textarea
+  id: response
+  attributes:
+    label: Your response
+    description: Write it the way you would in real life. Length is up to you.
+    placeholder: Type your answer here...
+  validations:
+    required: true
+- type: input
+  id: note
+  attributes:
+    label: Optional context (no personal info)
+    description: Rough era or role helps researchers - e.g. '2024, nurse'. A name is not needed.
+- type: checkboxes
+  id: attest
+  attributes:
+    label: Confirm
+    options:
+    - label: I wrote this myself, from scratch - not pasted from an AI.
+      required: true
+    - label: I'm OK with this being published under CC-BY-4.0.
+      required: true
