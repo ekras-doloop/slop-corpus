@@ -29,9 +29,19 @@ the drift for themselves rather than trust anyone's snapshot - ours included.
 - `data/backfill_<YYYY-MM-DD>.jsonl` - **historical baseline** (`era` = `backfill`): the same prompts asked
   to notable *older, off-label* models (GPT-3.5, Claude 2, Llama-2, Mixtral, and the like). Drift needs an
   origin - you cannot measure a trend from today forward only. This anchors the timeline before the corpus began.
+- `data/community/*.jsonl` - **contributor-attested** model runs (labeled `source:community`), kept separate
+  from the canonical spine. `human/*.jsonl` - the human baseline. Both fully in the open.
 - `pulse.jsonl` - public interest history (see Sunset clause).
-- `prompts.json` - the fixed situational prompt family (append-only; ids are stable).
+- `prompts.json` - the fixed situational prompt family (append-only; ids are stable). **Everything is
+  joinable:** each response row's `prompt_id` maps to the exact prompt text here, so prompt × model × date
+  is fully reconstructable from public files alone.
 - New snapshot roughly every two weeks (see `.github/workflows/collect.yml`).
+
+## Contribute
+The corpus is open to extension - see [`CONTRIBUTING.md`](CONTRIBUTING.md). Add **human answers** (`human/`),
+**model runs we don't collect** (`data/community/` - local models, fine-tunes, older releases), or **suggest a
+model** for canonical runs via an issue. `python3 validate.py <file>` checks your rows; CI runs the same on
+every PR. Community rows are labeled and quarantined so the authoritative record stays clean.
 
 ## For researchers
 Fixed prompts + many independent labs + dated snapshots + a historical baseline = a clean panel for
