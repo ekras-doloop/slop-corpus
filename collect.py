@@ -28,6 +28,7 @@ def gen(k,model,text):
     return None
 def main(argv):
     date=argv[0] if argv else "undated"; k=key()
+    os.makedirs(os.path.join(HERE,"data"),exist_ok=True)
     prompts=json.load(open(os.path.join(HERE,"prompts.json")))["prompts"]; models=latest()
     sys.stderr.write("latest models: "+", ".join(models)+"\n")
     out=os.path.join(HERE,"data",f"or_{date}.jsonl"); n=0
