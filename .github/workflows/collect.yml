@@ -34,8 +34,12 @@ jobs:
       - name: Publish snapshot + pulse
         if: always() && steps.kill.outcome == 'success'
         run: |
-          if [ -n "$(git status --porcelain data/ pulse.jsonl DORMANT.md)" ]; then
-            git config user.name "doloop-slop[bot]"; git config user.email "slop@doloop.io"
-            git add data/ pulse.jsonl DORMANT.md 2>/dev/null
-            git commit -m "snapshot $(date +%F): latest-model slop corpus + interest pulse"; git push
+          git config user.name "doloop-slop[bot]"; git config user.email "slop@doloop.io"
+          git add data pulse.jsonl || true          # add what exists; missing paths must NOT abort (bash -e)
+          [ -f DORMANT.md ] && git add DORMANT.md || true
+          if ! git diff --cached --quiet; then       # commit only if something is actually staged
+            git commit -m "snapshot $(date +%F): latest-model slop corpus + interest pulse"
+            git push
+          else
+            echo "nothing to publish"
           fi
