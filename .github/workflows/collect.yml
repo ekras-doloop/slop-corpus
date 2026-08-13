@@ -15,7 +15,7 @@ permissions:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 25          # cap a hung/slow model; retries are 90s x3 per call
+    timeout-minutes: 45          # 8 models x 20 prompts = 160 real generations ~15-25min; SIGALRM bounds true hangs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
