@@ -20,10 +20,14 @@ def latest():
 def gen(k,model,text):
     body=json.dumps({"model":model,"messages":[{"role":"user","content":text}],"temperature":0.7,"max_tokens":1200,"reasoning":{"effort":"low"}}).encode()
     req=urllib.request.Request(OR+"/chat/completions",body,{"Authorization":f"Bearer {k}","Content-Type":"application/json","HTTP-Referer":"https://doloop.io","X-Title":"doloop-slop-corpus"})
-    for a in range(3):
+    for a in range(2):                                   # 2 tries, 60s each - a dead model costs ~2min not ~5
         try:
-            r=json.load(urllib.request.urlopen(req,timeout=90)); c=(r.get("choices") or [{}])[0].get("message",{}).get("content")
+            r=json.load(urllib.request.urlopen(req,timeout=60)); c=(r.get("choices") or [{}])[0].get("message",{}).get("content")
             if c: return c
+        except urllib.error.HTTPError as e:
+            sys.stderr.write(f"[err {model} a{a}] HTTP {e.code}\n")
+            if e.code in (400,404):break              # bad/unknown model id - not transient, don't retry
+            time.sleep(4)
         except Exception as e: sys.stderr.write(f"[err {model} a{a}] {e}\n"); time.sleep(4)
     return None
 def main(argv):
