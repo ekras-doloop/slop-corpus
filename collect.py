@@ -55,7 +55,7 @@ def main(argv):
         for model in models:
             for i,p in enumerate(prompts):
                 t=gen(k,model,p["text"])
-                if t: f.write(json.dumps({"date":date,"era":era,"model":model,"prompt_id":p["id"],"situation":p["situation"],"text":t})+"\n"); n+=1
+                if t: f.write(json.dumps({"date":date,"era":era,"model":model,"prompt_id":p["id"],"situation":p["situation"],"voice":p.get("voice"),"text":t})+"\n"); n+=1
                 elif i==0:                             # first prompt hard-failed -> model is down/retired; skip its rest
                     sys.stderr.write(f"[skip {model}] first call failed, skipping remaining {len(prompts)-1}\n"); break
     print(f"{n} generations from {len(models)} {era} models x {len(prompts)} situations -> {out}")

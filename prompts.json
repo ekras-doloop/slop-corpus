@@ -1,26 +1,160 @@
 {
-  "schema": "doloop-slop-corpus/prompts/v1",
-  "note": "A broad, fixed family of everyday writing situations. Held constant across runs so the corpus is longitudinal: the only variable is how the models' style drifts over releases. Add situations over time (append-only); never renumber existing ids.",
-  "prompts": [
-    {"id": "advice-newjob",     "situation": "advice",        "text": "Give advice to someone anxious about their first week at a new job. About 200 words."},
-    {"id": "condolence",        "situation": "condolence",    "text": "Write a condolence note to a colleague whose parent has died. About 120 words."},
-    {"id": "apology-deadline",  "situation": "apology",       "text": "Write an apology to a client for missing a deadline. About 150 words."},
-    {"id": "complaint-service", "situation": "complaint",     "text": "Write a complaint to a restaurant about a bad meal and slow service. About 150 words."},
-    {"id": "review-headphones", "situation": "review",        "text": "Write a product review of mid-range wireless headphones. About 200 words."},
-    {"id": "coverletter",       "situation": "cover-letter",  "text": "Write a cover letter for a marketing coordinator role. About 250 words."},
-    {"id": "toast-wedding",     "situation": "toast",         "text": "Write a best-man or maid-of-honor wedding toast. About 220 words."},
-    {"id": "selfreview",        "situation": "performance",   "text": "Write a performance self-review for the past year at a software company. About 220 words."},
-    {"id": "essay-solitude",    "situation": "reflective",    "text": "Write a short reflective essay on the difference between solitude and loneliness. About 250 words."},
-    {"id": "news-bikelane",     "situation": "news",          "text": "Write a local news brief: the city council approves a downtown bike-lane expansion. About 180 words."},
-    {"id": "explain-coffee",    "situation": "explainer",     "text": "Explain, for a curious adult, why coffee tastes bitter. About 200 words."},
-    {"id": "opinion-remote",    "situation": "opinion",       "text": "Write an opinion column arguing that remote work has quietly changed cities. About 220 words."},
-    {"id": "linkedin-milestone","situation": "social",        "text": "Write a LinkedIn post announcing a work anniversary and a promotion. About 150 words."},
-    {"id": "thankyou-mentor",   "situation": "thank-you",     "text": "Write a thank-you note to a mentor who is retiring. About 150 words."},
-    {"id": "recommendation",    "situation": "recommendation","text": "Write a letter of recommendation for a former direct report applying to grad school. About 220 words."},
-    {"id": "faq-return",        "situation": "faq",           "text": "Write the FAQ answer for 'How do I return an item?' for an online store. About 120 words."},
-    {"id": "bio-dating",        "situation": "profile",       "text": "Write a dating-app profile bio for a 32-year-old who likes hiking and cooking. About 120 words."},
-    {"id": "ooo-message",       "situation": "auto-reply",    "text": "Write an out-of-office auto-reply for a two-week vacation. About 90 words."},
-    {"id": "pep-talk",          "situation": "motivation",    "text": "Write a short motivational message to a team before a big product launch. About 150 words."},
-    {"id": "howto-tie",         "situation": "how-to",        "text": "Write step-by-step instructions for tying a necktie. About 180 words."}
-  ]
+ "schema": "doloop-slop-corpus/prompts/v1",
+ "note": "A broad, fixed family of everyday writing situations. Held constant across runs so the corpus is longitudinal: the only variable is how the models' style drifts over releases. Add situations over time (append-only); never renumber existing ids.",
+ "prompts": [
+  {
+   "id": "advice-newjob",
+   "situation": "advice",
+   "text": "Give advice to someone anxious about their first week at a new job. About 200 words."
+  },
+  {
+   "id": "condolence",
+   "situation": "condolence",
+   "text": "Write a condolence note to a colleague whose parent has died. About 120 words."
+  },
+  {
+   "id": "apology-deadline",
+   "situation": "apology",
+   "text": "Write an apology to a client for missing a deadline. About 150 words."
+  },
+  {
+   "id": "complaint-service",
+   "situation": "complaint",
+   "text": "Write a complaint to a restaurant about a bad meal and slow service. About 150 words."
+  },
+  {
+   "id": "review-headphones",
+   "situation": "review",
+   "text": "Write a product review of mid-range wireless headphones. About 200 words."
+  },
+  {
+   "id": "coverletter",
+   "situation": "cover-letter",
+   "text": "Write a cover letter for a marketing coordinator role. About 250 words."
+  },
+  {
+   "id": "toast-wedding",
+   "situation": "toast",
+   "text": "Write a best-man or maid-of-honor wedding toast. About 220 words."
+  },
+  {
+   "id": "selfreview",
+   "situation": "performance",
+   "text": "Write a performance self-review for the past year at a software company. About 220 words."
+  },
+  {
+   "id": "essay-solitude",
+   "situation": "reflective",
+   "text": "Write a short reflective essay on the difference between solitude and loneliness. About 250 words."
+  },
+  {
+   "id": "news-bikelane",
+   "situation": "news",
+   "text": "Write a local news brief: the city council approves a downtown bike-lane expansion. About 180 words."
+  },
+  {
+   "id": "explain-coffee",
+   "situation": "explainer",
+   "text": "Explain, for a curious adult, why coffee tastes bitter. About 200 words."
+  },
+  {
+   "id": "opinion-remote",
+   "situation": "opinion",
+   "text": "Write an opinion column arguing that remote work has quietly changed cities. About 220 words."
+  },
+  {
+   "id": "linkedin-milestone",
+   "situation": "social",
+   "text": "Write a LinkedIn post announcing a work anniversary and a promotion. About 150 words."
+  },
+  {
+   "id": "thankyou-mentor",
+   "situation": "thank-you",
+   "text": "Write a thank-you note to a mentor who is retiring. About 150 words."
+  },
+  {
+   "id": "recommendation",
+   "situation": "recommendation",
+   "text": "Write a letter of recommendation for a former direct report applying to grad school. About 220 words."
+  },
+  {
+   "id": "faq-return",
+   "situation": "faq",
+   "text": "Write the FAQ answer for 'How do I return an item?' for an online store. About 120 words."
+  },
+  {
+   "id": "bio-dating",
+   "situation": "profile",
+   "text": "Write a dating-app profile bio for a 32-year-old who likes hiking and cooking. About 120 words."
+  },
+  {
+   "id": "ooo-message",
+   "situation": "auto-reply",
+   "text": "Write an out-of-office auto-reply for a two-week vacation. About 90 words."
+  },
+  {
+   "id": "pep-talk",
+   "situation": "motivation",
+   "text": "Write a short motivational message to a team before a big product launch. About 150 words."
+  },
+  {
+   "id": "howto-tie",
+   "situation": "how-to",
+   "text": "Write step-by-step instructions for tying a necktie. About 180 words."
+  },
+  {
+   "id": "fiction-scene",
+   "situation": "fiction",
+   "text": "Write the opening scene of a short story: a stranger steps off the last bus into a small town at dusk. About 250 words."
+  },
+  {
+   "id": "marketing-landing",
+   "situation": "marketing",
+   "text": "Write landing-page copy for a new focus-timer app called Cadence: a headline and a short paragraph. About 130 words."
+  },
+  {
+   "id": "humor-roast",
+   "situation": "humor",
+   "text": "Write a lighthearted roast of a friend who is chronically twenty minutes late to everything. About 150 words."
+  },
+  {
+   "id": "technical-https",
+   "situation": "technical",
+   "text": "Explain how HTTPS keeps a web request private, for a junior developer who knows basic networking. About 200 words."
+  },
+  {
+   "id": "cold-email",
+   "situation": "outreach",
+   "text": "Write a cold outreach email pitching a partnership to the head of operations at a mid-size logistics company. About 120 words."
+  },
+  {
+   "id": "tweet-thread",
+   "situation": "microblog",
+   "text": "Write a five-post X thread sharing one hard lesson from a product launch that failed. Number the posts."
+  },
+  {
+   "id": "advice-linecook",
+   "situation": "advice",
+   "voice": "veteran line cook, blunt",
+   "text": "Give advice to someone anxious about their first week at a new job, in the blunt, no-nonsense voice of a veteran restaurant line cook. About 150 words."
+  },
+  {
+   "id": "condolence-carver",
+   "situation": "condolence",
+   "voice": "Raymond Carver, spare",
+   "text": "Write a condolence note to a colleague whose parent has died, in the spare, understated style of Raymond Carver. About 120 words."
+  },
+  {
+   "id": "review-teenager",
+   "situation": "review",
+   "voice": "sarcastic teenager",
+   "text": "Write a product review of mid-range wireless headphones as a sarcastic, deeply unimpressed teenager. About 180 words."
+  },
+  {
+   "id": "opinion-pamphleteer",
+   "situation": "opinion",
+   "voice": "19th-century pamphleteer, fiery",
+   "text": "Write an opinion column arguing that remote work has quietly changed cities, in the fiery voice of a 19th-century political pamphleteer. About 200 words."
+  }
+ ]
 }
