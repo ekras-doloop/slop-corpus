@@ -27,7 +27,7 @@ def latest():
         if lab not in best or m.get("created",0)>best[lab]["created"]: best[lab]={"id":mid,"created":m.get("created",0)}
     return [best[l]["id"] for l in LABS if l in best]
 def gen(k,model,text):
-    body=json.dumps({"model":model,"messages":[{"role":"user","content":text}],"temperature":0.7,"max_tokens":1200,"reasoning":{"effort":"low"}}).encode()
+    body=json.dumps({"model":model,"messages":[{"role":"user","content":text}],"temperature":0.7,"max_tokens":700,"reasoning":{"effort":"low"}}).encode()
     req=urllib.request.Request(OR+"/chat/completions",body,{"Authorization":f"Bearer {k}","Content-Type":"application/json","HTTP-Referer":"https://doloop.io","X-Title":"doloop-slop-corpus"})
     for a in range(2):                                   # 2 tries; a dead/slow model costs ~2.5min not hours
         try:
