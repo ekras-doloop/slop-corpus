@@ -4,6 +4,12 @@ via OpenRouter, save a dated snapshot to data/. Latest chat flagship per lab is 
 so the corpus tracks new releases automatically. OPENROUTER_API_KEY from env. Usage: collect.py <YYYY-MM-DD>"""
 import urllib.request, json, os, sys, time, signal
 OR="https://openrouter.ai/api/v1"; HERE=os.path.dirname(os.path.abspath(__file__))
+# BACKFILL roster: notable OFF-LABEL (older) models, kept as HISTORICAL baseline points so slop DRIFT has
+# an origin - you can't measure a trend from today forward only. Best-effort: any 404 (retired) just skips.
+# Run once via `collect.py <date> backfill`; output tagged era:backfill in data/backfill_<date>.jsonl.
+HISTORICAL=["openai/gpt-3.5-turbo","openai/gpt-4-turbo","anthropic/claude-2.1","anthropic/claude-3-haiku",
+    "google/gemini-flash-1.5","google/gemma-2-27b-it","meta-llama/llama-2-70b-chat","meta-llama/llama-3-70b-instruct",
+    "mistralai/mistral-7b-instruct","mistralai/mixtral-8x7b-instruct","deepseek/deepseek-chat","qwen/qwen-2-72b-instruct"]
 class _Deadline(Exception): pass
 def _alarm(sig,frm): raise _Deadline()
 signal.signal(signal.SIGALRM,_alarm)   # hard TOTAL cap per call: urllib timeout is per-read, a trickle can hang past it
@@ -38,17 +44,20 @@ def gen(k,model,text):
     signal.alarm(0); return None
 def main(argv):
     date=argv[0] if argv else "undated"; k=key()
+    backfill = len(argv)>1 and argv[1]=="backfill"
     os.makedirs(os.path.join(HERE,"data"),exist_ok=True)
-    prompts=json.load(open(os.path.join(HERE,"prompts.json")))["prompts"]; models=latest()
-    sys.stderr.write("latest models: "+", ".join(models)+"\n")
-    out=os.path.join(HERE,"data",f"or_{date}.jsonl"); n=0
+    prompts=json.load(open(os.path.join(HERE,"prompts.json")))["prompts"]
+    models = HISTORICAL if backfill else latest()
+    era = "backfill" if backfill else "latest"
+    sys.stderr.write(f"{era} models: "+", ".join(models)+"\n")
+    out=os.path.join(HERE,"data",f"{'backfill' if backfill else 'or'}_{date}.jsonl"); n=0
     with open(out,"w") as f:
         for model in models:
             for i,p in enumerate(prompts):
                 t=gen(k,model,p["text"])
-                if t: f.write(json.dumps({"date":date,"model":model,"prompt_id":p["id"],"situation":p["situation"],"text":t})+"\n"); n+=1
-                elif i==0:                             # first prompt hard-failed -> model is down; skip its rest
+                if t: f.write(json.dumps({"date":date,"era":era,"model":model,"prompt_id":p["id"],"situation":p["situation"],"text":t})+"\n"); n+=1
+                elif i==0:                             # first prompt hard-failed -> model is down/retired; skip its rest
                     sys.stderr.write(f"[skip {model}] first call failed, skipping remaining {len(prompts)-1}\n"); break
-    print(f"{n} generations from {len(models)} latest models x {len(prompts)} situations -> {out}")
+    print(f"{n} generations from {len(models)} {era} models x {len(prompts)} situations -> {out}")
     return 0
 if __name__=="__main__": sys.exit(main(sys.argv[1:]))

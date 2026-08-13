@@ -16,10 +16,21 @@ does not. We publish it as a public good so researchers, writers, editors, and t
 the drift for themselves rather than trust anyone's snapshot - ours included.
 
 ## Data
-- `data/or_<YYYY-MM-DD>.jsonl` - one JSON object per line:
-  `{"date","model","prompt_id","situation","text"}`
+- `data/or_<YYYY-MM-DD>.jsonl` - ongoing snapshots. One JSON object per line:
+  `{"date","era","model","prompt_id","situation","text"}` (`era` = `latest`).
+- `data/backfill_<YYYY-MM-DD>.jsonl` - **historical baseline** (`era` = `backfill`): the same prompts asked
+  to notable *older, off-label* models (GPT-3.5, Claude 2, Llama-2, Mixtral, and the like). Drift needs an
+  origin - you cannot measure a trend from today forward only. This anchors the timeline before the corpus began.
+- `pulse.jsonl` - public interest history (see Sunset clause).
 - `prompts.json` - the fixed situational prompt family (append-only; ids are stable).
 - New snapshot roughly every two weeks (see `.github/workflows/collect.yml`).
+
+## For researchers
+Fixed prompts + many independent labs + dated snapshots + a historical baseline = a clean panel for
+studying machine style. Concrete questions it supports: which phrases saturate into cliche and how fast;
+whether independent houses *converge* on one register (they do - three frontier models unprompted all reach
+for the same reassurance opening); how a single lab's voice moves release to release; and what a real human
+baseline would have to beat. CC-BY-4.0 - cite it, fork it, extend the prompt family.
 
 ## Method
 Latest chat flagship per lab (anthropic/openai/google/meta/mistral/xai/deepseek/qwen), auto-detected from

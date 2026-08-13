@@ -2,7 +2,13 @@ name: slop-corpus-collect
 on:
   schedule:
     - cron: '23 8 1,15 * *'      # ~biweekly (1st & 15th), 08:23 UTC off-minute
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'latest (ongoing snapshot) or backfill (one-time historical baseline)'
+        type: choice
+        default: latest
+        options: [latest, backfill]
 permissions:
   contents: write
   actions: write                 # kill switch self-disables the cron after a year unused
@@ -20,11 +26,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: python3 killswitch.py
-      - name: Collect latest-model snapshot
+      - name: Collect snapshot
         if: steps.kill.outputs.dormant != 'true'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: python3 collect.py "$(date +%F)"
+        run: python3 collect.py "$(date +%F)" ${{ github.event.inputs.mode == 'backfill' && 'backfill' || '' }}
       - name: Publish snapshot + pulse
         if: always() && steps.kill.outcome == 'success'
         run: |
