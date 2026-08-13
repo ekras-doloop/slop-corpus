@@ -1,0 +1,26 @@
+{
+  "schema": "doloop-slop-corpus/prompts/v1",
+  "note": "A broad, fixed family of everyday writing situations. Held constant across runs so the corpus is longitudinal: the only variable is how the models' style drifts over releases. Add situations over time (append-only); never renumber existing ids.",
+  "prompts": [
+    {"id": "advice-newjob",     "situation": "advice",        "text": "Give advice to someone anxious about their first week at a new job. About 200 words."},
+    {"id": "condolence",        "situation": "condolence",    "text": "Write a condolence note to a colleague whose parent has died. About 120 words."},
+    {"id": "apology-deadline",  "situation": "apology",       "text": "Write an apology to a client for missing a deadline. About 150 words."},
+    {"id": "complaint-service", "situation": "complaint",     "text": "Write a complaint to a restaurant about a bad meal and slow service. About 150 words."},
+    {"id": "review-headphones", "situation": "review",        "text": "Write a product review of mid-range wireless headphones. About 200 words."},
+    {"id": "coverletter",       "situation": "cover-letter",  "text": "Write a cover letter for a marketing coordinator role. About 250 words."},
+    {"id": "toast-wedding",     "situation": "toast",         "text": "Write a best-man or maid-of-honor wedding toast. About 220 words."},
+    {"id": "selfreview",        "situation": "performance",   "text": "Write a performance self-review for the past year at a software company. About 220 words."},
+    {"id": "essay-solitude",    "situation": "reflective",    "text": "Write a short reflective essay on the difference between solitude and loneliness. About 250 words."},
+    {"id": "news-bikelane",     "situation": "news",          "text": "Write a local news brief: the city council approves a downtown bike-lane expansion. About 180 words."},
+    {"id": "explain-coffee",    "situation": "explainer",     "text": "Explain, for a curious adult, why coffee tastes bitter. About 200 words."},
+    {"id": "opinion-remote",    "situation": "opinion",       "text": "Write an opinion column arguing that remote work has quietly changed cities. About 220 words."},
+    {"id": "linkedin-milestone","situation": "social",        "text": "Write a LinkedIn post announcing a work anniversary and a promotion. About 150 words."},
+    {"id": "thankyou-mentor",   "situation": "thank-you",     "text": "Write a thank-you note to a mentor who is retiring. About 150 words."},
+    {"id": "recommendation",    "situation": "recommendation","text": "Write a letter of recommendation for a former direct report applying to grad school. About 220 words."},
+    {"id": "faq-return",        "situation": "faq",           "text": "Write the FAQ answer for 'How do I return an item?' for an online store. About 120 words."},
+    {"id": "bio-dating",        "situation": "profile",       "text": "Write a dating-app profile bio for a 32-year-old who likes hiking and cooking. About 120 words."},
+    {"id": "ooo-message",       "situation": "auto-reply",    "text": "Write an out-of-office auto-reply for a two-week vacation. About 90 words."},
+    {"id": "pep-talk",          "situation": "motivation",    "text": "Write a short motivational message to a team before a big product launch. About 150 words."},
+    {"id": "howto-tie",         "situation": "how-to",        "text": "Write step-by-step instructions for tying a necktie. About 180 words."}
+  ]
+}
