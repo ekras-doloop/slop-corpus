@@ -26,6 +26,13 @@ Latest chat flagship per lab (anthropic/openai/google/meta/mistral/xai/deepseek/
 the OpenRouter model list by newest-created, skipping guard/vision/embed/etc. `temperature 0.7`, ~1200 tokens.
 Reproduce a run: `OPENROUTER_API_KEY=... python3 collect.py $(date +%F)`.
 
+## Sunset clause
+This corpus is a public good with a dead-man's switch. Every run logs a public interest pulse to
+`pulse.jsonl` (stars, forks, watchers, issues - the signals CI doesn't generate itself). If a full
+year passes with **zero** external interest, the collector auto-closes: the cron disables itself and a
+`DORMANT.md` appears. Already-collected data stays public forever; re-enabling the workflow is one click.
+No point spending tokens on a corpus nobody pulls. See `killswitch.py`.
+
 ## License
 Data and code: **CC-BY-4.0**. Use it freely; credit *doloop slop-corpus (doloop.io)*.
 
