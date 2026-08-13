@@ -15,7 +15,7 @@ def latest():
     for m in d:
         mid=m["id"]; lab=mid.split("/")[0]
         if lab not in LABS or any(s in mid.lower() for s in SKIP): continue
-        if lab not in best or m.get("created",0)>best[lab]["created"]: best[lab]={"id":mid,"c":m.get("created",0)}
+        if lab not in best or m.get("created",0)>best[lab]["created"]: best[lab]={"id":mid,"created":m.get("created",0)}
     return [best[l]["id"] for l in LABS if l in best]
 def gen(k,model,text):
     body=json.dumps({"model":model,"messages":[{"role":"user","content":text}],"temperature":0.7,"max_tokens":1200,"reasoning":{"effort":"low"}}).encode()
