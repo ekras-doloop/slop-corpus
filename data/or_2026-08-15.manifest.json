@@ -1,0 +1,33 @@
+{
+ "date": "2026-08-15",
+ "era": "latest",
+ "schema": "doloop-slop-corpus/data/v2",
+ "params": {
+  "temperature": 0.7,
+  "max_tokens": 700,
+  "reasoning_effort": "low"
+ },
+ "prompt_set_sha256_16": "1a3119914efa42a8",
+ "n_prompts": 30,
+ "n_generations": 208,
+ "models_requested": [
+  "anthropic/claude-opus-5-fast",
+  "openai/gpt-5.6-luna-pro",
+  "google/gemini-3.7-flash",
+  "meta-llama/llama-4-maverick",
+  "mistralai/mistral-medium-3-5",
+  "x-ai/grok-4.6",
+  "deepseek/deepseek-v4-pro-0813",
+  "qwen/qwen3.8-27b"
+ ],
+ "models_served": [
+  "anthropic/claude-opus-5-fast",
+  "deepseek/deepseek-v4-pro-0813",
+  "google/gemini-3.7-flash",
+  "meta-llama/llama-4-maverick",
+  "mistralai/mistral-medium-3-5",
+  "openai/gpt-5.6-luna-pro",
+  "qwen/qwen3.8-27b",
+  "x-ai/grok-4.6"
+ ]
+}
