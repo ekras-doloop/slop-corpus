@@ -25,6 +25,10 @@ from datetime import datetime, timezone
 API = "https://api.github.com"
 WORKFLOW_FILE = "collect.yml"
 GRACE_DAYS = 365
+# GR, 2026-11-15: the value of this corpus is to researchers LATER, when today's models are retired and their
+# output can no longer be collected at any price. Present interest is the wrong test, so the switch no longer
+# closes the collector. The pulse is still logged. Set CLOSE_WHEN_UNUSED = True to restore the 08-12 rule.
+CLOSE_WHEN_UNUSED = False
 
 def _get(path, token):
     req = urllib.request.Request(API + path,
@@ -65,7 +69,7 @@ def main():
     sys.stderr.write(f"pulse: age={age_days}d interest={interest} "
                      f"(stars={stars} forks={forks} watchers_ext={max(0,subs-1)} issues={issues}) clones14d={clones}\n")
 
-    if age_days > GRACE_DAYS and interest == 0:
+    if CLOSE_WHEN_UNUSED and age_days > GRACE_DAYS and interest == 0:
         sys.stderr.write(f"KILL SWITCH: {age_days}d old, zero external interest for a full year -> closing.\n")
         _disable(repo, token)
         _write_dormant(age_days)

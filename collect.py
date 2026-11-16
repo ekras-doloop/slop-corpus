@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """doloop slop-corpus collector: ask the fixed situational prompts (prompts.json) to the LATEST models
 via OpenRouter, save a dated snapshot to data/. Latest chat flagship per lab is auto-detected each run,
-so the corpus tracks new releases automatically. OPENROUTER_API_KEY from env. Usage: collect.py <YYYY-MM-DD>"""
+so the corpus tracks new releases automatically, plus fixed ANCHORS every run. OPENROUTER_API_KEY from env. Usage: collect.py <YYYY-MM-DD>"""
 import urllib.request, json, os, sys, time, signal, hashlib
 OR="https://openrouter.ai/api/v1"; HERE=os.path.dirname(os.path.abspath(__file__))
 # BACKFILL roster: notable OFF-LABEL (older) models, kept as HISTORICAL baseline points so slop DRIFT has
@@ -26,6 +26,11 @@ def latest():
         if lab not in LABS or any(s in mid.lower() for s in SKIP): continue
         if lab not in best or m.get("created",0)>best[lab]["created"]: best[lab]={"id":mid,"created":m.get("created",0)}
     return [best[l]["id"] for l in LABS if l in best]
+# ANCHORS: one fixed model per lab, asked every run alongside the latest, so a change over time can be told
+# apart from a change of model (2026-11-15: llama-4-maverick, the only model held fixed, shifted its punctuation
+# with no change of name; without fixed anchors that is invisible). A retired anchor just fails its first call.
+ANCHORS=["anthropic/claude-haiku-5.5","openai/gpt-6.1-sol-pro","google/gemini-4-argon","meta-llama/llama-4-maverick",
+    "mistralai/mistral-large-4-0","x-ai/grok-4.7","deepseek/deepseek-v4.1-flash","qwen/qwen3.8-max-prime"]
 PARAMS={"temperature":0.7,"max_tokens":700,"reasoning_effort":"low"}   # recorded per row for reproducibility
 def gen(k,model,text):
     body=json.dumps({"model":model,"messages":[{"role":"user","content":text}],"temperature":PARAMS["temperature"],"max_tokens":PARAMS["max_tokens"],"reasoning":{"effort":PARAMS["reasoning_effort"]}}).encode()
@@ -35,7 +40,7 @@ def gen(k,model,text):
             signal.alarm(75)                             # hard total deadline (beats urllib's per-read timeout)
             r=json.load(urllib.request.urlopen(req,timeout=60)); signal.alarm(0)
             ch=(r.get("choices") or [{}])[0]; c=ch.get("message",{}).get("content"); u=r.get("usage") or {}
-            meta={"or_model":r.get("model"),"finish_reason":ch.get("finish_reason"),
+            meta={"or_model":r.get("model"),"or_provider":r.get("provider"),"finish_reason":ch.get("finish_reason"),
                   "prompt_tokens":u.get("prompt_tokens"),"completion_tokens":u.get("completion_tokens"),"attempts":a+1}
             if c: return c, meta
         except urllib.error.HTTPError as e:
@@ -52,7 +57,7 @@ def main(argv):
     prompts_raw=open(os.path.join(HERE,"prompts.json"),"rb").read()
     prompts=json.loads(prompts_raw)["prompts"]
     pset_sha=hashlib.sha256(prompts_raw).hexdigest()[:16]   # which prompt version produced this snapshot
-    models = HISTORICAL if backfill else latest()
+    models = HISTORICAL if backfill else list(dict.fromkeys(latest()+ANCHORS))   # latest first, anchors deduped
     era = "backfill" if backfill else "latest"
     sys.stderr.write(f"{era} models: "+", ".join(models)+"\n")
     stem=f"{'backfill' if backfill else 'or'}_{date}"
@@ -63,17 +68,21 @@ def main(argv):
                 t,meta=gen(k,model,p["text"])
                 if t:
                     m=meta or {}
-                    f.write(json.dumps({"date":date,"era":era,"model":model,"or_model":m.get("or_model"),
+                    f.write(json.dumps({"date":date,"era":era,"model":model,"or_model":m.get("or_model"),"or_provider":m.get("or_provider"),"anchor":model in ANCHORS,
                         "prompt_id":p["id"],"situation":p["situation"],"voice":p.get("voice"),
                         "finish_reason":m.get("finish_reason"),"prompt_tokens":m.get("prompt_tokens"),
                         "completion_tokens":m.get("completion_tokens"),"params":PARAMS,"text":t})+"\n")
                     n+=1; served.add(model)
                 elif i==0:                             # first prompt hard-failed -> model is down/retired; skip its rest
                     sys.stderr.write(f"[skip {model}] first call failed, skipping remaining {len(prompts)-1}\n"); break
+    if n==0:                                           # every model failed (e.g. key 401): publish nothing, fail the run
+        os.remove(out)
+        sys.stderr.write(f"FAIL: 0 generations from {len(models)} models; no snapshot written\n")
+        return 1
     # per-snapshot manifest: everything needed to reproduce/interpret this file
     manifest={"date":date,"era":era,"schema":"doloop-slop-corpus/data/v2","params":PARAMS,
               "prompt_set_sha256_16":pset_sha,"n_prompts":len(prompts),"n_generations":n,
-              "models_requested":models,"models_served":sorted(served)}
+              "models_requested":models,"anchors":ANCHORS,"models_served":sorted(served)}
     json.dump(manifest,open(os.path.join(HERE,"data",stem+".manifest.json"),"w"),indent=1)
     print(f"{n} generations from {len(served)}/{len(models)} {era} models x {len(prompts)} situations -> {out}")
     return 0

@@ -19,6 +19,11 @@ moving target - what reads fresh today is a cliche in a year. A one-off list rot
 does not. We publish it as a public good so researchers, writers, editors, and tool-builders can measure
 the drift for themselves rather than trust anyone's snapshot - ours included.
 
+## Findings
+Dated observations, each with the rows and script behind it, are in [`FINDINGS.md`](FINDINGS.md). The first
+(2026-11-15): the two Anthropic 5.5 models in this corpus wrote no em dash in any of 60 answers, and
+claude-fable-5.2 in 2 of 30, after three earlier Anthropic models used them in most answers.
+
 ## Data
 - `data/or_<YYYY-MM-DD>.jsonl` - ongoing snapshots. One JSON object per line:
   `{"date","era","model","or_model","prompt_id","situation","voice","finish_reason","prompt_tokens","completion_tokens","params","text"}`.
@@ -26,9 +31,10 @@ the drift for themselves rather than trust anyone's snapshot - ours included.
   OpenRouter actually served; `finish_reason` lets you drop truncated rows; `params`=exact decode settings.
 - `data/*.manifest.json` - per snapshot: params, `prompt_set_sha256_16` (which prompt version made it),
   models requested vs served, counts. Everything needed to reproduce or filter a snapshot.
-- `data/backfill_<YYYY-MM-DD>.jsonl` - **historical baseline** (`era` = `backfill`): the same prompts asked
-  to notable *older, off-label* models (GPT-3.5, Claude 2, Llama-2, Mixtral, and the like). Drift needs an
-  origin - you cannot measure a trend from today forward only. This anchors the timeline before the corpus began.
+- `data/backfill_<YYYY-MM-DD>.jsonl` - **historical baseline** (`era` = `backfill`), not yet collected: the
+  same prompts asked to older models (GPT-3.5, Claude 2, Llama-2, Mixtral and the like) via `collect.py <date> backfill`.
+  Many of those models are already retired, which is the reason this corpus exists: model output that is not
+  recorded while a model is served cannot be recovered later.
 - `data/community/*.jsonl` - **contributor-attested** model runs (labeled `source:community`), kept separate
   from the canonical spine. `human/*.jsonl` - the human baseline. Both fully in the open.
 - `pulse.jsonl` - public interest history (see Sunset clause).
@@ -48,7 +54,7 @@ model** for canonical runs via an issue. `python3 validate.py <file>` checks you
 every PR. Community rows are labeled and quarantined so the authoritative record stays clean.
 
 ## For researchers
-Fixed prompts + many independent labs + dated snapshots + a historical baseline = a clean panel for
+Fixed prompts + many independent labs + dated snapshots + fixed anchor models = a panel for
 studying machine style. Concrete questions it supports: which phrases saturate into cliche and how fast;
 whether independent houses *converge* on one register (they do - three frontier models unprompted all reach
 for the same reassurance opening); how a single lab's voice moves release to release; and what a real human
@@ -59,15 +65,15 @@ extend the prompt family.
 
 ## Method
 Latest chat flagship per lab (anthropic/openai/google/meta/mistral/xai/deepseek/qwen), auto-detected from
-the OpenRouter model list by newest-created, skipping guard/vision/embed/etc. `temperature 0.7`, ~1200 tokens.
+the OpenRouter model list by newest-created, skipping guard/vision/embed/etc. Since 2026-11-15 a fixed **anchor** model per lab (`ANCHORS` in `collect.py`) is also asked every run, so a
+change over time can be told apart from a change of model; rows carry `anchor` and `or_provider` (who served the
+call). `temperature 0.7`, `max_tokens 700`, `reasoning_effort low`; truncated rows have `finish_reason: "length"`.
 Reproduce a run: `OPENROUTER_API_KEY=... python3 collect.py $(date +%F)`.
 
-## Sunset clause
-This corpus is a public good with a dead-man's switch. Every run logs a public interest pulse to
-`pulse.jsonl` (stars, forks, watchers, issues - the signals CI doesn't generate itself). If a full
-year passes with **zero** external interest, the collector auto-closes: the cron disables itself and a
-`DORMANT.md` appears. Already-collected data stays public forever; re-enabling the workflow is one click.
-No point spending tokens on a corpus nobody pulls. See `killswitch.py`.
+## Why it keeps running
+Every run logs a public interest pulse to `pulse.jsonl`. Until 2026-11-15 a year of zero interest would have
+closed the collector. That rule is off: the value of this record is to researchers later, when today's models
+are retired and their output can no longer be collected at any price. See `killswitch.py` (`CLOSE_WHEN_UNUSED`).
 
 ## License
 Data and code: **CC-BY-4.0**. Use it freely; credit *doloop slop-corpus (doloop.io)*.
