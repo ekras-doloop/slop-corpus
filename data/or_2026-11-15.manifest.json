@@ -9,7 +9,7 @@
  },
  "prompt_set_sha256_16": "1a3119914efa42a8",
  "n_prompts": 30,
- "n_generations": 0,
+ "n_generations": 207,
  "models_requested": [
   "anthropic/claude-fable-5.2",
   "openai/gpt-6.1-terra-pro",
@@ -20,5 +20,14 @@
   "deepseek/deepseek-v4.1-flash-1017",
   "qwen/qwen3.8-max-prime"
  ],
- "models_served": []
+ "models_served": [
+  "anthropic/claude-fable-5.2",
+  "deepseek/deepseek-v4.1-flash-1017",
+  "google/gemini-4-hydrogen",
+  "meta-llama/llama-4-maverick",
+  "mistralai/mistral-large-4-0",
+  "openai/gpt-6.1-terra-pro",
+  "qwen/qwen3.8-max-prime",
+  "x-ai/grok-4.7"
+ ]
 }
